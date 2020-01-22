@@ -1,0 +1,5 @@
+include ':repository'
+include ':api'
+include ':mvvm'
+include ':app'
+rootProject.name = "KotlinNews"
