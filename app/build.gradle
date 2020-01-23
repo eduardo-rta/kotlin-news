@@ -33,9 +33,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(path: ':api')
-    implementation project(path: ':repository')
-    implementation project(path: ':mvvm')
+
 
     implementation deps.kotlin_std_lib
     implementation deps.androidx_core_ktx
@@ -45,6 +43,7 @@ dependencies {
     implementation deps.androidx_lifecycle_viewmodel
     implementation deps.androidx_recyclerview
     implementation deps.androidx_paging_ktx
+    implementation deps.androidx_swiperefreshlayout
 
     implementation deps.rx_java
     implementation deps.rx_android
@@ -64,6 +63,10 @@ dependencies {
     implementation deps.room_compiler
     implementation deps.room_ktx
     implementation deps.room_rx_java
+
+    implementation project(path: ':api')
+    implementation project(path: ':repository')
+    implementation project(path: ':mvvm')
 
     implementation deps.dagger
     kapt deps.kapt_dagger_compiler

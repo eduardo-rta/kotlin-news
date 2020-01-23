@@ -1,16 +1,38 @@
 package com.kotlinnews.mvvm.di
 
-import com.kotlinnews.api.reddit.RedditRestApi
-import com.kotlinnews.mvvm.RedditNewsViewModel
-import com.kotlinnews.repository.reddit.RedditDb
-import com.kotlinnews.repository.reddit.dao.NewsDao
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.kotlinnews.mvvm.viewModels.RedditNewsViewModel
+import com.kotlinnews.mvvm.ViewModelFactory
+import com.kotlinnews.mvvm.viewModels.NewsDetailViewModel
+import dagger.Binds
+import dagger.MapKey
 import dagger.Module
-import dagger.Provides
+import dagger.multibindings.IntoMap
+import kotlin.reflect.KClass
+
+@Target(
+    AnnotationTarget.FUNCTION,
+    AnnotationTarget.PROPERTY_GETTER,
+    AnnotationTarget.PROPERTY_SETTER
+)
+@Retention(AnnotationRetention.RUNTIME)
+@MapKey
+annotation class ViewModelKey(val value: KClass<out ViewModel>)
 
 @Module
-class ViewModelModule {
-//    @Provides
-//    fun providesRedditNewsViewModel(newsDao: NewsDao, db: RedditDb, api: RedditRestApi): RedditNewsViewModel {
-//        return RedditNewsViewModel(newsDao, db, api)
-//    }
+abstract class ViewModelModule {
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RedditNewsViewModel::class)
+    abstract fun bindRedditNewsViewModel(viewModel: RedditNewsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(NewsDetailViewModel::class)
+    abstract fun bindNewsDetailViewModel(viewModel: NewsDetailViewModel): ViewModel
+
+    @Binds
+    abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 }

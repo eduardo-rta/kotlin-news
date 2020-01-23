@@ -11,6 +11,7 @@ versions.androidx_livedata_ktx = '2.1.0'
 versions.androidx_recyclerview = '1.1.0'
 versions.androidx_paging = '2.1.0'
 versions.androidx_core_testing = '2.1.0'
+versions.androidx_swiperefreshlayout = '1.0.0'
 
 versions.rx_java = '2.2.17'
 versions.rx_android = '2.1.1'
@@ -40,6 +41,7 @@ deps.androidx_lifecycle_extensions = "androidx.lifecycle:lifecycle-extensions:$v
 deps.androidx_lifecycle_viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.androidx_lifecycle_viewmodel"
 deps.androidx_recyclerview = "androidx.recyclerview:recyclerview:$versions.androidx_recyclerview"
 deps.androidx_paging_ktx = "androidx.paging:paging-runtime-ktx:$versions.androidx_paging"
+deps.androidx_swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:$versions.androidx_swiperefreshlayout"
 
 deps.rx_java = "io.reactivex.rxjava2:rxjava:$versions.rx_java"
 deps.rx_android = "io.reactivex.rxjava2:rxandroid:$versions.rx_android"

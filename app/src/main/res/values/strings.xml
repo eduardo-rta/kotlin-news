@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">KotlinNews</string>
+    <string name="app_name">Kotlin News</string>
+    <string name="title_activity_news_detail">NewsDetailActivity</string>
+        <string name="invalid_id">Invalid id</string>
 </resources>

@@ -24,6 +24,7 @@ import javax.inject.Inject
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.switchMap
 import androidx.paging.toLiveData
+import java.util.concurrent.Executors
 
 
 class RedditRepository constructor(
@@ -88,10 +89,9 @@ class RedditRepository constructor(
      * */
     @MainThread
     public fun getNews(): GenericListResult<NewsEntity> {
-        val boundaryCallback =
-            RedditNewsBoundaryCallback(compositeDisposable, scheduler, api, pageSize) {
-                this.insertNews(it.news)
-            }
+        val boundaryCallback = RedditNewsBoundaryCallback(compositeDisposable, scheduler, api, pageSize, Executors.newSingleThreadExecutor()) {
+            this.insertNews(it.news)
+        }
         val refreshTrigger = MutableLiveData<Unit>()
         val refreshState = refreshTrigger.switchMap {
             refresh()
@@ -105,7 +105,6 @@ class RedditRepository constructor(
             loadState = boundaryCallback.operationState,
             refreshState = refreshState,
             refresh = {
-                //TODO: Why?
                 refreshTrigger.value = null
             },
             retry = {

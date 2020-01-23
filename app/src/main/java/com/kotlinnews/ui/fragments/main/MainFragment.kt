@@ -7,13 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.kotlinnews.KotlinNewsApp
 import com.kotlinnews.R
-import com.kotlinnews.api.reddit.RedditRestApi
-import com.kotlinnews.mvvm.RedditNewsViewModel
+import com.kotlinnews.mvvm.viewModels.RedditNewsViewModel
 import com.kotlinnews.repository.OperationStatus
-import com.kotlinnews.repository.reddit.RedditDb
-import com.kotlinnews.repository.reddit.dao.NewsDao
 import com.kotlinnews.ui.adapters.news.NewsAdapter
 import kotlinx.android.synthetic.main.main_fragment.*
 import timber.log.Timber
@@ -25,15 +25,11 @@ class MainFragment : Fragment() {
     }
 
     @Inject
-    internal lateinit var newsDao: NewsDao
-
-    @Inject
-    internal lateinit var db: RedditDb
-
-    @Inject
-    internal lateinit var api: RedditRestApi
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var viewModel: RedditNewsViewModel
+
+    private val adapter = NewsAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +38,11 @@ class MainFragment : Fragment() {
         return inflater.inflate(R.layout.main_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         val app = this.activity?.application
@@ -50,48 +50,53 @@ class MainFragment : Fragment() {
             app.appComponent.inject(this)
         }
 
-        viewModel = ViewModelProviders.of(this).get(RedditNewsViewModel::class.java)
-        viewModel.initialize(newsDao, db, api)
-
+        viewModel = ViewModelProviders.of(this, this.viewModelFactory).get(RedditNewsViewModel::class.java)
 
         viewModel.loadState.observe(this, Observer {
-            addStatusText("load Observe")
-            addStatusText(it.status.toString())
-            if (it.status == OperationStatus.ERROR) {
-                if (it.throwable != null) {
-                    addStatusText(it.throwable?.message ?: "")
-                    Timber.e(it.throwable)
-                }
-                if (it.message != null) {
-                    addStatusText(it.message!!)
+            Timber.d("loadStateObserve - " + it.status.toString())
+            //            addStatusText("load Observe")
+//            addStatusText(it.status.toString())
+//            if (it.status == OperationStatus.ERROR) {
+//                if (it.throwable != null) {
+//                    addStatusText(it.throwable?.message ?: "")
+//                    Timber.e(it.throwable)
+//                }
+//                if (it.message != null) {
+//                    addStatusText(it.message!!)
+//                }
+//            }
+        })
+
+
+        viewModel.news.observe(this, Observer {
+            Timber.d("newsObserve")
+            adapter.submitList(it) {
+                val layoutManager = (newsRecyclerView.layoutManager as LinearLayoutManager)
+                val position = layoutManager.findFirstCompletelyVisibleItemPosition()
+                if (position != RecyclerView.NO_POSITION) {
+                    newsRecyclerView.scrollToPosition(position)
                 }
             }
         })
 
-        viewModel.refreshState.observe(this, Observer {
-            addStatusText("refresh Observe")
-            addStatusText(it.status.toString())
+
+        setupAdapter()
+        setupSwipeToRefresh()
+
+        viewModel.load.postValue(null)
+    }
+
+    private fun setupAdapter() {
+        newsRecyclerView.adapter = this.adapter
+    }
+
+    private fun setupSwipeToRefresh() {
+        this.viewModel.refreshState.observe(this, Observer {
+            Timber.d("refreshStateObserver - " + it.status.toString())
+            swipeRefreshLayout.isRefreshing = it.status == OperationStatus.LOADING
         })
-
-        viewModel.news.observe(this, Observer {
-            addStatusText("news Observe")
-            addStatusText(it.count().toString())
-        })
-
-//        val adapter = NewsAdapter()
-
-//        newsRecyclerView.adapter
+        swipeRefreshLayout.setOnRefreshListener {
+            viewModel.refresh()
+        }
     }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.load.value = null
-    }
-
-    private fun addStatusText(textToAdd: String) {
-        var text = textView.text.toString()
-        text += textToAdd + "\n"
-        textView.text = text
-    }
-
 }

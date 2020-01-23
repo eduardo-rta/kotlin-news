@@ -1,4 +1,4 @@
-package com.kotlinnews.mvvm
+package com.kotlinnews.mvvm.viewModels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,19 +8,22 @@ import com.kotlinnews.api.reddit.RedditRestApi
 import com.kotlinnews.repository.reddit.RedditDb
 import com.kotlinnews.repository.reddit.RedditRepository
 import com.kotlinnews.repository.reddit.dao.NewsDao
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class RedditNewsViewModel : ViewModel() {
-    var compositeDisposable = CompositeDisposable()
+class RedditNewsViewModel @Inject constructor(
+    private val newsDao: NewsDao,
+    private val db: RedditDb,
+    private val api: RedditRestApi
+) : ViewModel() {
+    private val compositeDisposable = CompositeDisposable()
+    private val repository: RedditRepository = RedditRepository(compositeDisposable, Schedulers.io(), db, newsDao, api, 10)
 
-    private lateinit var repository: RedditRepository
-
-    var scheduler = Schedulers.io()
-
-    fun initialize(newsDao: NewsDao, db: RedditDb, api: RedditRestApi) {
-        repository = RedditRepository(compositeDisposable, scheduler, db, newsDao, api, 10)
+    //TODO: Remove this
+    init {
+        Observable.fromCallable { db.clearAllTables() }.subscribeOn(Schedulers.io()).subscribe()
     }
 
     var load = MutableLiveData<Unit>()

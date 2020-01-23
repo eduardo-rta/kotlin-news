@@ -19,16 +19,6 @@ class NewsAdapter : PagedListAdapter<NewsEntity, NewsViewHolder>(diffCallback) {
         }
     }
 
-    override fun onBindViewHolder(
-        holder: NewsViewHolder,
-        position: Int,
-        payloads: MutableList<Any>
-    ) {
-        super.onBindViewHolder(holder, position, payloads)
-    }
-
-
-
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<NewsEntity>() {
             override fun areItemsTheSame(oldItem: NewsEntity, newItem: NewsEntity): Boolean {
@@ -36,7 +26,7 @@ class NewsAdapter : PagedListAdapter<NewsEntity, NewsViewHolder>(diffCallback) {
             }
 
             override fun areContentsTheSame(oldItem: NewsEntity, newItem: NewsEntity): Boolean {
-                return oldItem.newsId == newItem.newsId
+                return oldItem.title == newItem.title
             }
         }
     }

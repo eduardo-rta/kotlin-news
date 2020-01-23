@@ -43,6 +43,11 @@ dependencies {
     implementation deps.androidx_lifecycle_extensions
     implementation deps.androidx_livedata_ktx
 
+    implementation deps.room_runtime
+    implementation deps.room_compiler
+    implementation deps.room_ktx
+    implementation deps.room_rx_java
+
     implementation deps.dagger
     kapt deps.kapt_dagger_compiler
     implementation deps.dagger_android
