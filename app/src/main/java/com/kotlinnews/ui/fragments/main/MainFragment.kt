@@ -71,6 +71,9 @@ class MainFragment : Fragment() {
 
         viewModel.news.observe(this, Observer {
             Timber.d("newsObserve")
+            if (progressBar.visibility == View.VISIBLE && it.size > 0) {
+                progressBar.visibility = View.GONE
+            }
             adapter.submitList(it) {
                 val layoutManager = (newsRecyclerView.layoutManager as LinearLayoutManager)
                 val position = layoutManager.findFirstCompletelyVisibleItemPosition()
