@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 29
@@ -38,6 +39,19 @@ dependencies {
 
     implementation deps.kotlin_std_lib
     implementation deps.androidx_core_ktx
+    implementation deps.androidx_paging_ktx
+    implementation deps.androidx_lifecycle_extensions
+    implementation deps.androidx_livedata_ktx
+
+    implementation deps.dagger
+    kapt deps.kapt_dagger_compiler
+    implementation deps.dagger_android
+    kapt deps.kapt_dagger_processor
+
+    implementation deps.rx_java
+    implementation deps.rx_android
+
+    implementation deps.timber
 
     testImplementation deps.test_impl_junit
     androidTestImplementation deps.test_impl_ext_junit

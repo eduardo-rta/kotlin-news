@@ -14,7 +14,9 @@ abstract class RedditDb : RoomDatabase() {
 
     companion object {
         fun createDb(context: Context): RedditDb {
-            return Room.databaseBuilder(context, RedditDb::class.java, "reddit_db").build()
+            return Room.databaseBuilder(context, RedditDb::class.java, "reddit_db")
+                .fallbackToDestructiveMigration()
+                .build()
         }
     }
 }

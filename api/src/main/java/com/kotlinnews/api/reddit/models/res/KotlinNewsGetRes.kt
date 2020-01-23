@@ -8,5 +8,7 @@ import com.google.gson.annotations.SerializedName
  * */
 
 data class KotlinNewsGetRes(
+    var after: String? = null,
+    var before: String? = null,
     val news: List<KotlinNewsItemGetRes>
 )

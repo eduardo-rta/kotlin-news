@@ -36,6 +36,7 @@ dependencies {
 
     implementation deps.kotlin_std_lib
     implementation deps.androidx_core_ktx
+    implementation deps.androidx_paging_ktx
 
     implementation deps.rx_java
     implementation deps.rx_android

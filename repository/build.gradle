@@ -39,13 +39,20 @@ dependencies {
     implementation deps.kotlin_std_lib
     implementation deps.androidx_core_ktx
     implementation deps.androidx_paging_ktx
+    implementation deps.androidx_lifecycle_extensions
+    implementation deps.androidx_livedata_ktx
 
     implementation deps.rx_java
+    implementation deps.rx_android
+
+    implementation deps.retrofit
 
     implementation deps.room_runtime
     implementation deps.room_compiler
     implementation deps.room_ktx
     implementation deps.room_rx_java
+
+    implementation deps.timber
 
     implementation deps.dagger
     kapt deps.kapt_dagger_compiler

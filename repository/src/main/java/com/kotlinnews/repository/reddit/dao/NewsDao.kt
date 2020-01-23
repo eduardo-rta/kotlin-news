@@ -22,6 +22,9 @@ interface NewsDao {
     fun insert(entity: NewsEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(entity: List<NewsEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertSingle(entity: NewsEntity): Single<Long>
 
     @Delete

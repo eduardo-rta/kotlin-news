@@ -25,12 +25,23 @@ class KotlinNewsDeserializer : JsonDeserializer<KotlinNewsGetRes> {
         val root = json.asJsonObject
 
         if (!root.has("data")) {
-            return KotlinNewsGetRes(listOf())
+            return KotlinNewsGetRes(null, null, listOf())
         }
         val data = root.getAsJsonObject("data")
 
         if (!data.has("children")) {
-            return KotlinNewsGetRes(listOf())
+            return KotlinNewsGetRes(null, null, listOf())
+        }
+
+        var after: String? = null
+        var before: String? = null
+
+        if (data.has("after") && !data.get("after").isJsonNull) {
+            after = data.get("after").asString
+        }
+
+        if (data.has("before") && !data.get("before").isJsonNull) {
+            before = data.get("before").asString
         }
 
         val children = data.getAsJsonArray("children")
@@ -48,6 +59,6 @@ class KotlinNewsDeserializer : JsonDeserializer<KotlinNewsGetRes> {
             )
         }
 
-        return KotlinNewsGetRes(items.toList())
+        return KotlinNewsGetRes(after, before, items.toList())
     }
 }

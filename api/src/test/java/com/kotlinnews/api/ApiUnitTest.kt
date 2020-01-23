@@ -31,6 +31,8 @@ class ApiUnitTest {
                 "}" +
                 "}" +
                 "]" +
+                ", after : \"after1\"" +
+                ", before : \"beforeX\"" +
                 "}" +
                 "}"
 
@@ -42,6 +44,8 @@ class ApiUnitTest {
             json,
             KotlinNewsGetRes::class.java
         )
+        assert(model.after == "after1")
+        assert(model.before == "beforeX")
         assert(model.news.size == 1)
         assert(model.news[0].id == "ermx0p")
         assert(model.news[0].title == "Is it bad practice to directly set the value of an object's field?")
