@@ -52,7 +52,6 @@ dependencies {
 
     implementation deps.dagger
     kapt deps.kapt_dagger_compiler
-    implementation deps.dagger_android
     kapt deps.kapt_dagger_processor
 
     testImplementation deps.test_impl_junit
@@ -62,7 +61,6 @@ dependencies {
 
     androidTestImplementation deps.dagger
     kaptAndroidTest deps.kapt_dagger_compiler
-    androidTestImplementation deps.dagger_android
     kaptAndroidTest deps.kapt_dagger_processor
 
 }

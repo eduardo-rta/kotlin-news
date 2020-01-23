@@ -1,6 +1,7 @@
 package com.kotlinnews
 
 import android.app.Application
+import com.facebook.stetho.Stetho
 import com.kotlinnews.di.AppComponent
 import com.kotlinnews.di.DaggerAppComponent
 import com.kotlinnews.repository.reddit.di.RedditDbModule
@@ -17,11 +18,16 @@ class KotlinNewsApp : Application() {
             .build()
 
         setupTimber()
+        setupStetho()
     }
 
     private fun setupTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+    }
+
+    private fun setupStetho() {
+        Stetho.initializeWithDefaults(this)
     }
 }

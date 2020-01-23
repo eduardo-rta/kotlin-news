@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.kotlinnews.KotlinNewsApp
 import com.kotlinnews.R
 import com.kotlinnews.mvvm.viewModels.NewsDetailViewModel
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_news_detail.*
 import javax.inject.Inject
 
@@ -47,6 +48,9 @@ class NewsDetailActivity : AppCompatActivity() {
             titleTextView.text = it.title
             if (!it.thumbnail.isNullOrBlank()) {
                 newsImageView.visibility = View.VISIBLE
+                Picasso.get()
+                    .load(it.thumbnail)
+                    .into(newsImageView)
             } else {
                 newsImageView.visibility = View.GONE
             }

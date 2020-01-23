@@ -10,7 +10,8 @@
     android:layout_marginBottom="@dimen/default_margin_half"
     android:background="@drawable/bg_box_rounded"
     android:clipToPadding="true"
-    android:elevation="2dp">
+    android:elevation="2dp"
+    android:paddingBottom="@dimen/default_margin">
 
     <TextView
         android:id="@+id/titleTextView"
@@ -28,11 +29,10 @@
     <ImageView
         android:id="@+id/newsImageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:layout_marginTop="@dimen/default_margin"
         android:contentDescription="@null"
-        android:minHeight="60dp"
-        android:scaleType="centerInside"
+        android:maxHeight="120dp"
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView"
         tools:ignore="RtlHardcoded" />

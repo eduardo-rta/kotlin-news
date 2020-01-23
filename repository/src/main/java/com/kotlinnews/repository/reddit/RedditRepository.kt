@@ -35,13 +35,16 @@ class RedditRepository constructor(
     private val api: RedditRestApi,
     private val pageSize: Int
 ) {
-
-
     private fun insertNews(items: List<KotlinNewsItemGetRes>) {
         db.runInTransaction {
             newsDao.insertAll(items.map {
+                val thumb = when {
+                    !it.thumbnail.isNullOrBlank() -> it.thumbnail
+                    !it.media?.oembed?.thumbnailUrl.isNullOrBlank() -> it.media?.oembed?.thumbnailUrl ?: ""
+                    else -> null
+                }
                 //id is auto-generated
-                NewsEntity(0, it.id, it.title, it.name, it.thumbnail, it.url, it.createdUtc)
+                NewsEntity(0, it.id, it.title, it.name, thumb, it.url, it.createdUtc)
             })
         }
     }
@@ -89,7 +92,12 @@ class RedditRepository constructor(
      * */
     @MainThread
     public fun getNews(): GenericListResult<NewsEntity> {
-        val boundaryCallback = RedditNewsBoundaryCallback(compositeDisposable, scheduler, api, pageSize, Executors.newSingleThreadExecutor()) {
+        val boundaryCallback = RedditNewsBoundaryCallback(
+            compositeDisposable,
+            scheduler,
+            api,
+            pageSize
+        ) {
             this.insertNews(it.news)
         }
         val refreshTrigger = MutableLiveData<Unit>()
@@ -108,7 +116,7 @@ class RedditRepository constructor(
                 refreshTrigger.value = null
             },
             retry = {
-                //TODO: No retry for now
+                boundaryCallback.retryFailed()
             })
     }
 }

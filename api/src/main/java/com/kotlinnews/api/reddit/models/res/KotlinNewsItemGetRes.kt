@@ -22,5 +22,20 @@ data class KotlinNewsItemGetRes(
     val url: String,
 
     @SerializedName("created_utc")
-    val createdUtc: Long
+    val createdUtc: Long,
+
+    @SerializedName("media")
+    val media: KotlinNewsItemMediaGetRes?
+)
+
+data class KotlinNewsItemMediaGetRes(
+    @SerializedName("type")
+    val type: String?,
+    @SerializedName("oembed")
+    val oembed: KotlinNewsItemMediaOembed?
+)
+
+data class KotlinNewsItemMediaOembed(
+    @SerializedName("thumbnail_url")
+    val thumbnailUrl: String?
 )

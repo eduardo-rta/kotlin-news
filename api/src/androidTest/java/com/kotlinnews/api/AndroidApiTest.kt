@@ -37,7 +37,7 @@ class AndroidApiTest {
 
     @Test
     fun getOne() {
-        api.getNewsBeforeSingle("", 1)
+        api.getNewsSingle(1)
             .test()
             .assertComplete()
             .assertValue { r -> r.code() == 200 }
@@ -48,7 +48,7 @@ class AndroidApiTest {
 
     @Test
     fun getFive() {
-        api.getNewsBeforeSingle("", 5)
+        api.getNewsSingle(5)
             .test()
             .assertComplete()
             .assertValue { r -> r.code() == 200 }

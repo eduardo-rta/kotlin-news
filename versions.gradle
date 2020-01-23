@@ -25,7 +25,6 @@ versions.stetho = '1.5.1'
 versions.room = '2.2.3'
 versions.room_rx_java = '2.2.3'
 versions.leakcanary = '2.1'
-versions.roboelectrict = ''
 versions.okhttp3_interceptor = '3.14.0'
 
 ext.versions = versions
@@ -49,14 +48,12 @@ deps.retrofit = "com.squareup.retrofit2:retrofit:$versions.retrofit"
 deps.retrofit_gson = "com.squareup.retrofit2:converter-gson:$versions.retrofit_gson"
 deps.retrofit_rx_java = "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit"
 
-
 deps.gson = "com.google.code.gson:gson:$versions.gson"
 deps.timber = "com.jakewharton.timber:timber:$versions.timber"
 deps.picasso = "com.squareup.picasso:picasso:$versions.picasso"
 
 deps.dagger = "com.google.dagger:dagger:$versions.dagger"
 deps.kapt_dagger_compiler = "com.google.dagger:dagger-compiler:$versions.dagger"
-deps.dagger_android = "com.google.dagger:dagger-android:$versions.dagger"
 deps.kapt_dagger_processor = "com.google.dagger:dagger-android-processor:$versions.dagger"
 
 deps.stetho = "com.facebook.stetho:stetho:$versions.stetho"
@@ -70,7 +67,6 @@ deps.room_ktx = "androidx.room:room-ktx:$versions.room"
 deps.room_rx_java = "androidx.room:room-rxjava2:$versions.room_rx_java"
 
 deps.leakcanary = "com.squareup.leakcanary:leakcanary-android:$versions.leakcanary"
-deps.roboelectrict = ""
 
 deps.test_impl_junit = "junit:junit:4.13"
 deps.test_impl_ext_junit = "androidx.test.ext:junit:1.1.1"

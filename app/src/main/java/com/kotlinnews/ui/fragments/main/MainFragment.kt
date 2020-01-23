@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kotlinnews.KotlinNewsApp
 import com.kotlinnews.R
 import com.kotlinnews.mvvm.viewModels.RedditNewsViewModel
+import com.kotlinnews.repository.OperationState
 import com.kotlinnews.repository.OperationStatus
 import com.kotlinnews.ui.adapters.news.NewsAdapter
 import kotlinx.android.synthetic.main.main_fragment.*
@@ -52,21 +53,21 @@ class MainFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(this, this.viewModelFactory).get(RedditNewsViewModel::class.java)
 
-        viewModel.loadState.observe(this, Observer {
-            Timber.d("loadStateObserve - " + it.status.toString())
-            //            addStatusText("load Observe")
-//            addStatusText(it.status.toString())
-//            if (it.status == OperationStatus.ERROR) {
-//                if (it.throwable != null) {
-//                    addStatusText(it.throwable?.message ?: "")
-//                    Timber.e(it.throwable)
-//                }
-//                if (it.message != null) {
-//                    addStatusText(it.message!!)
-//                }
-//            }
-        })
 
+        setupAdapter()
+        setupSwipeToRefresh()
+
+        viewModel.load.postValue(null)
+    }
+
+    private fun setupAdapter() {
+        newsRecyclerView.adapter = this.adapter
+
+        viewModel.loadState.observe(this, Observer {
+            Timber.d("loadStateObserve - ${it.status}")
+            progressBar.visibility = if (it.status == OperationStatus.LOADING && adapter.itemCount == 0) View.VISIBLE else View.GONE
+            adapter.setState(it)
+        })
 
         viewModel.news.observe(this, Observer {
             Timber.d("newsObserve")
@@ -79,22 +80,14 @@ class MainFragment : Fragment() {
             }
         })
 
-
-        setupAdapter()
-        setupSwipeToRefresh()
-
-        viewModel.load.postValue(null)
-    }
-
-    private fun setupAdapter() {
-        newsRecyclerView.adapter = this.adapter
     }
 
     private fun setupSwipeToRefresh() {
         this.viewModel.refreshState.observe(this, Observer {
-            Timber.d("refreshStateObserver - " + it.status.toString())
+            Timber.d("refreshStateObserver - ${it.status}")
             swipeRefreshLayout.isRefreshing = it.status == OperationStatus.LOADING
         })
+
         swipeRefreshLayout.setOnRefreshListener {
             viewModel.refresh()
         }

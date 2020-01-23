@@ -19,15 +19,10 @@ class RedditNewsViewModel @Inject constructor(
     private val api: RedditRestApi
 ) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
-    private val repository: RedditRepository = RedditRepository(compositeDisposable, Schedulers.io(), db, newsDao, api, 10)
-
-    //TODO: Remove this
-    init {
-        Observable.fromCallable { db.clearAllTables() }.subscribeOn(Schedulers.io()).subscribe()
-    }
+    private val repository: RedditRepository = RedditRepository(compositeDisposable, Schedulers.io(), db, newsDao, api, 20)
 
     var load = MutableLiveData<Unit>()
-    val result = load.map { repository.getNews() }
+    private val result = load.map { repository.getNews() }
     val news = result.switchMap { it.pagedList }
     val loadState = result.switchMap { it.loadState }
     val refreshState = result.switchMap { it.refreshState }
