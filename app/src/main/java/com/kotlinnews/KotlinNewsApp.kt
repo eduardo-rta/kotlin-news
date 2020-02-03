@@ -30,4 +30,7 @@ class KotlinNewsApp : Application() {
     private fun setupStetho() {
         Stetho.initializeWithDefaults(this)
     }
+
+
+
 }

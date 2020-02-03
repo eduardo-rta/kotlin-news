@@ -48,6 +48,10 @@ dependencies {
     implementation deps.room_ktx
     implementation deps.room_rx_java
 
+    implementation deps.retrofit
+    implementation deps.retrofit_gson
+    implementation deps.retrofit_rx_java
+
     implementation deps.dagger
     kapt deps.kapt_dagger_compiler
     kapt deps.kapt_dagger_processor

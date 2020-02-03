@@ -37,7 +37,7 @@ class AndroidApiTest {
 
     @Test
     fun getOne() {
-        api.getNewsSingle(1)
+        api.getNewsRx(1)
             .test()
             .assertComplete()
             .assertValue { r -> r.code() == 200 }
@@ -48,7 +48,7 @@ class AndroidApiTest {
 
     @Test
     fun getFive() {
-        api.getNewsSingle(5)
+        api.getNewsRx(5)
             .test()
             .assertComplete()
             .assertValue { r -> r.code() == 200 }

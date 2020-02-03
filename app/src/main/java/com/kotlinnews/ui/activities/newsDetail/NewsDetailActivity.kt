@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.kotlinnews.KotlinNewsApp
 import com.kotlinnews.R
-import com.kotlinnews.mvvm.viewModels.NewsDetailViewModel
+import com.kotlinnews.mvvm.viewModels.RedditNewsDetailViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_news_detail.*
 import javax.inject.Inject
@@ -23,7 +23,7 @@ class NewsDetailActivity : AppCompatActivity() {
         const val EXTRA_ID = "EXTRA_ID"
     }
 
-    lateinit var viewModel: NewsDetailViewModel
+    lateinit var viewModelReddit: RedditNewsDetailViewModel
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -36,15 +36,15 @@ class NewsDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news_detail)
 
-        viewModel =
-            ViewModelProviders.of(this, this.viewModelFactory).get(NewsDetailViewModel::class.java)
+        viewModelReddit =
+            ViewModelProviders.of(this, this.viewModelFactory).get(RedditNewsDetailViewModel::class.java)
 
 
         backImageView.setOnClickListener {
             this.finish()
         }
 
-        viewModel.news.observe(this, Observer {
+        viewModelReddit.news.observe(this, Observer {
             titleTextView.text = it.title
             if (!it.thumbnail.isNullOrBlank()) {
                 newsImageView.visibility = View.VISIBLE
@@ -79,6 +79,6 @@ class NewsDetailActivity : AppCompatActivity() {
             return
         }
 
-        viewModel.loadNews.postValue(id)
+        viewModelReddit.loadNews.postValue(id)
     }
 }

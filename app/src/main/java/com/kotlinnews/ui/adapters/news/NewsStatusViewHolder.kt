@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso
 class NewsStatusViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val retryTextView: TextView = itemView.findViewById(R.id.retryTextView)
     private val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
-    private var retryClick: RetryClickHandler? = null
+    var retryClick: RetryClickHandler? = null
 
     init {
         this.itemView.isClickable = true

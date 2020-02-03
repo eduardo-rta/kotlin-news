@@ -1,30 +1,23 @@
-package com.kotlinnews.ui.fragments.main
+package com.kotlinnews.ui.activities.news
 
-import androidx.lifecycle.ViewModelProviders
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kotlinnews.KotlinNewsApp
 import com.kotlinnews.R
 import com.kotlinnews.mvvm.viewModels.RedditNewsViewModel
-import com.kotlinnews.repository.OperationState
 import com.kotlinnews.repository.OperationStatus
 import com.kotlinnews.ui.adapters.news.NewsAdapter
-import kotlinx.android.synthetic.main.main_fragment.*
+import kotlinx.android.synthetic.main.activity_news.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class MainFragment : Fragment() {
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
+class NewsActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -32,35 +25,37 @@ class MainFragment : Fragment() {
 
     private val adapter = NewsAdapter()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    }
+        setContentView(R.layout.activity_news)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        val app = this.activity?.application
+        val app = this.application
         if (app is KotlinNewsApp) {
             app.appComponent.inject(this)
         }
 
-        viewModel = ViewModelProviders.of(this, this.viewModelFactory).get(RedditNewsViewModel::class.java)
+        this.viewModel = ViewModelProviders.of(this, this.viewModelFactory).get(RedditNewsViewModel::class.java)
 
+        this.setupAdapter()
+        this.setupSwipeToRefresh()
 
-        setupAdapter()
-        setupSwipeToRefresh()
+        this.viewModel.loadAtFrontState.observe(this, Observer {
+            Timber.d("viewModel.loadAtFrontState - ${it.status} | ${it.affectedItems}")
+            this.swipeRefreshLayout.isRefreshing = it.status == OperationStatus.LOADING
+            this.loadUpdatesTextView.visibility = if (it.status == OperationStatus.SUCCESS && it.affectedItems ?: 0 > 0) View.VISIBLE else View.GONE
+        })
 
-        viewModel.load.postValue(null)
+        this.loadUpdatesTextView.setOnClickListener {
+            this.viewModel.refresh()
+        }
+        this.viewModel.loadNews()
     }
 
     private fun setupAdapter() {
+        this.adapter.retryLoad = {
+            this.viewModel.retry()
+        }
+        
         newsRecyclerView.adapter = this.adapter
 
         viewModel.loadState.observe(this, Observer {
@@ -74,6 +69,7 @@ class MainFragment : Fragment() {
             if (progressBar.visibility == View.VISIBLE && it.size > 0) {
                 progressBar.visibility = View.GONE
             }
+
             adapter.submitList(it) {
                 val layoutManager = (newsRecyclerView.layoutManager as LinearLayoutManager)
                 val position = layoutManager.findFirstCompletelyVisibleItemPosition()
@@ -82,7 +78,6 @@ class MainFragment : Fragment() {
                 }
             }
         })
-
     }
 
     private fun setupSwipeToRefresh() {

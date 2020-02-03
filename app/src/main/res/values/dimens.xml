@@ -18,5 +18,8 @@
     <dimen name="default_margin_half">8dp</dimen>
 
     <dimen name="default_title">30sp</dimen>
+    <dimen name="default_title_medium">26sp</dimen>
     <dimen name="default_subtitle">22sp</dimen>
+
+    <dimen name="default_button_text">16sp</dimen>
 </resources>

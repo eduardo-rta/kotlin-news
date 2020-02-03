@@ -14,4 +14,6 @@
     <color name="news_detail_background">#E3E3E3</color>
     <color name="news_detail_content_box">#ffffff</color>
     <color name="news_detail_title_foreground">#332F35</color>
+
+    <color name="danger">#F44336</color>
 </resources>

@@ -1,16 +1,11 @@
 package com.kotlinnews.mvvm.viewModels
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.kotlinnews.api.reddit.RedditRestApi
 import com.kotlinnews.repository.reddit.RedditDb
-import com.kotlinnews.repository.reddit.RedditRepository
+import com.kotlinnews.repository.reddit.RedditNewsRepository
 import com.kotlinnews.repository.reddit.dao.NewsDao
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class RedditNewsViewModel @Inject constructor(
@@ -18,14 +13,19 @@ class RedditNewsViewModel @Inject constructor(
     private val db: RedditDb,
     private val api: RedditRestApi
 ) : ViewModel() {
-    private val compositeDisposable = CompositeDisposable()
-    private val repository: RedditRepository = RedditRepository(compositeDisposable, Schedulers.io(), db, newsDao, api, 20)
+    private val executor = Executors.newSingleThreadExecutor()
 
-    var load = MutableLiveData<Unit>()
-    private val result = load.map { repository.getNews() }
+    private val newsRepository: RedditNewsRepository = RedditNewsRepository(this.db, this.newsDao, this.api, 20, this.executor)
+
+    private var load = MutableLiveData<Unit>()
+    private val result = load.map { newsRepository.getResults() }
     val news = result.switchMap { it.pagedList }
     val loadState = result.switchMap { it.loadState }
     val refreshState = result.switchMap { it.refreshState }
+    val loadAtFrontState = result.switchMap { it.loadAtFrontState }
+
+    init {
+    }
 
     fun refresh() {
         result.value?.refresh?.invoke()
@@ -35,8 +35,11 @@ class RedditNewsViewModel @Inject constructor(
         result.value?.retry?.invoke()
     }
 
+    fun loadNews() {
+        this.load.postValue(null)
+    }
+
     override fun onCleared() {
-        compositeDisposable.clear()
         super.onCleared()
     }
 }

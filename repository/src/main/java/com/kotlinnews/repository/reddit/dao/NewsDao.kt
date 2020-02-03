@@ -11,17 +11,29 @@ import io.reactivex.Single
 @Dao
 interface NewsDao {
 
-    @Query("select id, news_id, title, name, thumbnail, url, created_utc from news where id = :id")
+    @Query("select * from news where id = :id")
     fun getNews(id: Long): LiveData<NewsEntity>
 
-    @Query("select id, news_id, title, name, thumbnail, url, created_utc from news")
+    @Query("select * from news  order by created_utc DESC")
     fun getAll(): List<NewsEntity>
 
-    @Query("select id, news_id, title, name, thumbnail, url, created_utc from news order by id ASC")
+    @Query("select * from news order by created_utc DESC")
     fun getAllPaged(): DataSource.Factory<Int, NewsEntity>
 
-    @Query("select id, news_id, title, name, thumbnail, url, created_utc from news LIMIT :pageSize offset :startsFrom")
+    @Query("select * from news order by created_utc DESC LIMIT :pageSize offset :startsFrom")
     fun getAllPagedRx(pageSize: Int, startsFrom: Int): Single<List<NewsEntity>>
+
+    @Query("select n.* from news n where n.id > (select ifnull(n2.id, 0) from news n2 where n2.name = :after)  order by created_utc DESC LIMIT :pageSize offset :startsFrom")
+    fun getAfterKeyRx(after: String, pageSize: Int, startsFrom: Int): Single<List<NewsEntity>>
+
+    @Query("select n.* from news n where n.id < (select ifnull(n2.id, 0) from news n2 where n2.name = :before)  order by created_utc DESC LIMIT :pageSize offset :startsFrom")
+    fun getBeforeKeyRx(before: String, pageSize: Int, startsFrom: Int): Single<List<NewsEntity>>
+
+    @Query("select max(id) from news")
+    fun getLastIdSingle(): Single<Long>
+
+    @Query("select * from news where id > :id order by created_utc desc")
+    fun getNewsAfterIdSingle(id: Long): Single<List<NewsEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(entity: NewsEntity): Long
@@ -30,7 +42,12 @@ interface NewsDao {
     fun insertAll(entity: List<NewsEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAllCompletable(entity: List<NewsEntity>) : Completable
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertSingle(entity: NewsEntity): Single<Long>
+
+
 
     @Delete
     fun delete(entity: NewsEntity)

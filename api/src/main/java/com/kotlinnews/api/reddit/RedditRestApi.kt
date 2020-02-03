@@ -9,12 +9,35 @@ import retrofit2.http.Query
 
 interface RedditRestApi {
     /**
-     * Returns the the new items after an specific point
-     * @param after last
+     * Returns the items after an specific point (older news)
+     * @param after name of the last news (it would be the oldest news loaded, the bottom of the list)
      * */
     @GET("r/kotlin/.json")
-    fun getNewsAfterSingle(@Query("after") after: String, @Query("limit") limit: Int): Single<Response<KotlinNewsGetRes>>
+    fun getNewsAfterRx(@Query("after") after: String, @Query("limit") limit: Int): Single<Response<KotlinNewsGetRes>>
+
+    /**
+     * Returns the items before an specific point (newer news)
+     * @param before name of the news you want to start the search (it would be newest news loaded, the top of the list)
+     * */
+    @GET("r/kotlin/.json")
+    fun getNewsBeforeRx(@Query("before") before: String, @Query("limit") limit: Int): Single<Response<KotlinNewsGetRes>>
 
     @GET("r/kotlin/.json")
-    fun getNewsSingle(@Query("limit") limit: Int): Single<Response<KotlinNewsGetRes>>
+    fun getNewsRx(@Query("limit") limit: Int): Single<Response<KotlinNewsGetRes>>
+
+
+    @GET("r/kotlin/.json")
+    fun getNewsAfter(@Query("after") after: String, @Query("limit") limit: Int): Call<KotlinNewsGetRes>
+
+    /**
+     * Returns the items before an specific point (newer news)
+     * @param before name of the news you want to start the search (it would be newest news loaded, the top of the list)
+     * */
+    @GET("r/kotlin/.json")
+    fun getNewsBefore(@Query("before") before: String, @Query("limit") limit: Int): Call<KotlinNewsGetRes>
+
+    @GET("r/kotlin/.json")
+    fun getNews(@Query("limit") limit: Int): Call<KotlinNewsGetRes>
+
+
 }

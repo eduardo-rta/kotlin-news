@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity(tableName = "news", indices = [Index("id", unique = true)])
+@Entity(tableName = "news", indices = [Index("news_id", unique = true)])
 data class NewsEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
     @ColumnInfo(name = "news_id") val newsId: String,

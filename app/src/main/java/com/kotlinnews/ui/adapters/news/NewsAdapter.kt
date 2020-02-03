@@ -2,6 +2,7 @@ package com.kotlinnews.ui.adapters.news
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ typealias RetryClickHandler = () -> Unit
 class NewsAdapter : PagedListAdapter<NewsEntity, RecyclerView.ViewHolder>(diffCallback) {
 
     private var operationState: OperationState = OperationState.success()
+    var retryLoad: RetryClickHandler? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -24,7 +26,12 @@ class NewsAdapter : PagedListAdapter<NewsEntity, RecyclerView.ViewHolder>(diffCa
             }
             R.layout.item_news_status -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.item_news_status, parent, false)
-                NewsStatusViewHolder(view)
+                val vh = NewsStatusViewHolder(view)
+                vh.retryClick = {
+                    retryLoad?.invoke()
+                }
+                vh
+
             }
             else -> throw IllegalArgumentException("Unknown viewType ($viewType)")
         }
@@ -79,7 +86,7 @@ class NewsAdapter : PagedListAdapter<NewsEntity, RecyclerView.ViewHolder>(diffCa
             }
 
             override fun areContentsTheSame(oldItem: NewsEntity, newItem: NewsEntity): Boolean {
-                return oldItem.title == newItem.title
+                return oldItem.newsId == newItem.newsId
             }
         }
     }
