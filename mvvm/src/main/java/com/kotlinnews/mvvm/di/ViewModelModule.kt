@@ -6,7 +6,7 @@ import com.kotlinnews.mvvm.viewModels.RedditNewsViewModel
 import com.kotlinnews.mvvm.ViewModelFactory
 import com.kotlinnews.mvvm.viewModels.RedditNewsDetailRxViewModel
 import com.kotlinnews.mvvm.viewModels.RedditNewsDetailViewModel
-import com.kotlinnews.mvvm.viewModels.RedditNewsViewRxViewModel
+import com.kotlinnews.mvvm.viewModels.RedditNewsRxViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -32,8 +32,8 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(RedditNewsViewRxViewModel::class)
-    abstract fun bindRedditNewsRxViewModel(viewModel: RedditNewsViewRxViewModel): ViewModel
+    @ViewModelKey(RedditNewsRxViewModel::class)
+    abstract fun bindRedditNewsRxViewModel(viewModel: RedditNewsRxViewModel): ViewModel
 
     @Binds
     @IntoMap

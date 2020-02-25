@@ -4,7 +4,7 @@
     <string name="invalid_id">Invalid id</string>
     <string name="error_loading_tap_to_retry">Error loading. Tap here to retry</string>
     <string name="load_updates">Load updates</string>
-    <string name="livedata_async_task">LiveData + AsyncTask</string>
+    <string name="livedata_executor">LiveData + Executor</string>
     <string name="livedata_coroutines">LiveData + Coroutines</string>
     <string name="rxjava">RxJava</string>
     <string name="clear_database">Clear Database</string>
@@ -14,4 +14,5 @@
     <string name="warning">Warning</string>
     <string name="done">Done</string>
     <string name="ok">Ok</string>
+    <string name="not_implemented_yet">Not implemented yet</string>
 </resources>

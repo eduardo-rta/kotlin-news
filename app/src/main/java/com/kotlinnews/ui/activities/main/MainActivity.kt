@@ -13,7 +13,7 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -26,7 +26,7 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+        setContentView(R.layout.activity_main)
 
         liveDataAsyncTaskButton.setOnClickListener {
             val intent = Intent(this, NewsActivity::class.java)
@@ -34,7 +34,13 @@ class MainActivity : BaseActivity() {
         }
 
         liveDataCoroutineButton.setOnClickListener {
-
+            this.currentDialog = AlertDialog.Builder(this)
+                .setTitle(R.string.warning)
+                .setMessage(R.string.not_implemented_yet)
+                .setPositiveButton(R.string.ok) { d, _ ->
+                    d.dismiss()
+                }
+                .show()
         }
 
         rxButton.setOnClickListener {
@@ -57,7 +63,6 @@ class MainActivity : BaseActivity() {
                 .show()
         }
     }
-
 
     override fun onStop() {
         this.currentDialog?.dismiss()

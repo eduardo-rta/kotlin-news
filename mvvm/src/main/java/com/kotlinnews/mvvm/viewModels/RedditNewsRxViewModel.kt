@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
 import java.lang.Exception
 import javax.inject.Inject
 
-class RedditNewsViewRxViewModel @Inject constructor(
+class RedditNewsRxViewModel @Inject constructor(
     private val newsDao: NewsDao,
     private val db: RedditDb,
     private val api: RedditRestApi
