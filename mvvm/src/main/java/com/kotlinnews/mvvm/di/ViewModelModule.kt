@@ -2,11 +2,11 @@ package com.kotlinnews.mvvm.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.kotlinnews.mvvm.viewModels.RedditNewsViewModel
+import com.kotlinnews.mvvm.viewModels.news.RedditNewsViewModel
 import com.kotlinnews.mvvm.ViewModelFactory
 import com.kotlinnews.mvvm.viewModels.RedditNewsDetailRxViewModel
 import com.kotlinnews.mvvm.viewModels.RedditNewsDetailViewModel
-import com.kotlinnews.mvvm.viewModels.RedditNewsRxViewModel
+import com.kotlinnews.mvvm.viewModels.news.RedditNewsRxViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module

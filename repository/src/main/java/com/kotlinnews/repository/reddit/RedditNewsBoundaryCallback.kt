@@ -12,7 +12,7 @@ import java.util.concurrent.Executor
 /**
  * Callback class to handle the all different scenarios in the PagedList live data
  * */
-class RedditNewsBoundaryCallback(
+class   RedditNewsBoundaryCallback(
     private val api: RedditRestApi,
     private val pageSize: Int,
     private val executor: Executor,

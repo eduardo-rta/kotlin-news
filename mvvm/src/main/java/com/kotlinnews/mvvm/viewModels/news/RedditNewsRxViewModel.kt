@@ -1,12 +1,14 @@
-package com.kotlinnews.mvvm.viewModels
+package com.kotlinnews.mvvm.viewModels.news
 
 import androidx.lifecycle.ViewModel
 import com.kotlinnews.api.reddit.RedditRestApi
+import com.kotlinnews.repository.OperationState
 import com.kotlinnews.repository.reddit.RedditDb
 import com.kotlinnews.repository.reddit.dao.NewsDao
 import com.kotlinnews.repository.reddit.entities.NewsEntity
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.lang.Exception
@@ -16,21 +18,35 @@ class RedditNewsRxViewModel @Inject constructor(
     private val newsDao: NewsDao,
     private val db: RedditDb,
     private val api: RedditRestApi
-) : ViewModel() {
-    private val compositeDisposable = CompositeDisposable(
+) : ViewModel(), IRedditNewsViewModel {
+    private val compositeDisposable = CompositeDisposable()
 
-    )
-    private lateinit var itemsEmmiter: ObservableEmitter<NewsEntity>
+    private lateinit var itemsEmitter: ObservableEmitter<NewsEntity>
     val itemsObservable: Observable<NewsEntity> = Observable.create { emmiter ->
-        itemsEmmiter = emmiter
+        itemsEmitter = emmiter
     }
 
+    private lateinit var refreshStateEmitter: ObservableEmitter<OperationState>
+    val refreshStateObservable = Observable.create<OperationState> {
+        refreshStateEmitter = it
+    }
 
-    fun loadNews() {
+    private lateinit var loadStateEmitter: ObservableEmitter<OperationState>
+    val loadStateObservable = Observable.create<OperationState> {
+        loadStateEmitter = it
+    }
+
+    private lateinit var loadAtFrontStateEmitter: ObservableEmitter<OperationState>
+    val loadAtFrontStateObservable = Observable.create<OperationState> {
+        loadAtFrontStateEmitter = it
+    }
+
+    override fun load() {
         this.compositeDisposable.add(
             //We concat because we want to wait until the local is loaded before triggering the remote data
             Observable.concat(getLocalData(), getRemoteData())
                 .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.computation())
                 .subscribe({
 
                 })
@@ -54,6 +70,14 @@ class RedditNewsRxViewModel @Inject constructor(
 
     fun setFilter(filter: String) {
 
+    }
+
+    override fun refresh() {
+        TODO("Not yet implemented")
+    }
+
+    override fun retry() {
+        TODO("Not yet implemented")
     }
 
     override fun onCleared() {

@@ -6,6 +6,7 @@
     <string name="load_updates">Load updates</string>
     <string name="livedata_executor">LiveData + Executor</string>
     <string name="livedata_coroutines">LiveData + Coroutines</string>
+    <string name="rxjava_livedata">RxJava + LiveData</string>
     <string name="rxjava">RxJava</string>
     <string name="clear_database">Clear Database</string>
     <string name="clear_database_confirmation_message">Are you sure you want to clear the database? This operation cannot be undone</string>
